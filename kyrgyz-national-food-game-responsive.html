@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Кыргыздын улуттук даамдары 🇰🇬</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background-color: #2c1810;
+    }
+
+    /* Kyrgyz Shyrdak / Oimo Border Pattern */
+    .kyrgyz-border {
+      border: 4px solid #d97706;
+      box-shadow: 0 10px 25px rgba(69, 26, 3, 0.35), inset 0 0 0 3px #fef3c7;
+    }
+    .kyrgyz-card {
+      background: linear-gradient(145deg, #fffbeb 0%, #fef3c7 100%);
+      border: 3px solid #b45309;
+      box-shadow: 0 8px 20px rgba(120, 53, 15, 0.2);
+    }
+    .wood-panel {
+      background: linear-gradient(180deg, #78350f 0%, #451a03 100%);
+      border: 3px solid #d97706;
+    }
+    .gold-btn {
+      background: linear-gradient(180deg, #fbbf24 0%, #d97706 100%);
+      border-bottom: 5px solid #92400e;
+      transition: transform 0.1s ease, filter 0.15s ease;
+    }
+    .gold-btn:hover {
+      filter: brightness(1.06);
+    }
+    .gold-btn:active {
+      transform: translateY(3px);
+      border-bottom-width: 2px;
+    }
+    .crimson-btn {
+      background: linear-gradient(180deg, #ef4444 0%, #b91c1c 100%);
+      border-bottom: 5px solid #7f1d1d;
+      transition: transform 0.1s ease, filter 0.15s ease;
+    }
+    .crimson-btn:hover {
+      filter: brightness(1.06);
+    }
+    .crimson-btn:active {
+      transform: translateY(3px);
+      border-bottom-width: 2px;
+    }
+    .green-btn {
+      background: linear-gradient(180deg, #22c55e 0%, #15803d 100%);
+      border-bottom: 5px solid #14532d;
+      transition: transform 0.1s ease, filter 0.15s ease;
+    }
+    .green-btn:hover {
+      filter: brightness(1.06);
+    }
+    .green-btn:active {
+      transform: translateY(3px);
+      border-bottom-width: 2px;
+    }
+
+    /* Animations */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float {
+      animation: floatSlow 3s ease-in-out infinite;
+    }
+
+    @keyframes steamRise {
+      0% { transform: translateY(0) scale(0.8); opacity: 0; }
+      40% { opacity: 0.8; }
+      100% { transform: translateY(-55px) scale(1.4); opacity: 0; }
+    }
+    .steam-puff {
+      animation: steamRise 2s ease-out infinite;
+    }
+
+    @keyframes flameFlicker {
+      0%, 100% { transform: scaleY(1) scaleX(1); }
+      50% { transform: scaleY(1.15) scaleX(0.92); }
+    }
+    .flame {
+      transform-origin: bottom center;
+      animation: flameFlicker 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      80% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .pop-in {
+      animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+    .shake {
+      animation: shake 0.35s ease-in-out;
+    }
+
+    /* Custom Scrollbar for Recipe Book */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #fef3c7;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d97706;
+      border-radius: 10px;
+    }
+
+    /* Responsive layout safeguards shared by dynamically rendered game screens. */
+    html {
+      min-width: 320px;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow-x: clip;
+    }
+
+    main,
+    #screen-start,
+    #screen-hub,
+    #screen-cook,
+    .kyrgyz-card,
+    .wood-panel {
+      min-width: 0;
+    }
+
+    #screen-start,
+    #screen-hub,
+    #screen-cook {
+      width: 100%;
+    }
+
+    #book-items-grid > *,
+    #cook-steps-checklist li,
+    #modal-steps-list li {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    #recipe-detail-modal,
+    #celebration-modal,
+    #dastorkon-modal {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    #recipe-detail-modal > .kyrgyz-card,
+    #celebration-modal > .kyrgyz-card,
+    #dastorkon-modal > .kyrgyz-card {
+      max-height: calc(100vh - 2rem);
+      max-height: calc(100svh - 2rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+
+    #cooking-station-area,
+    #cooking-station-area > *,
+    #ingredient-tray,
+    #ingredient-buttons {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    #cooking-station-area [class~="w-64"] {
+      max-width: 100%;
+    }
+
+    #cooking-station-area button {
+      max-width: 100%;
+      white-space: normal;
+      text-align: center;
+      justify-content: center;
+    }
+
+    #cook-steps-checklist li > span:last-child,
+    #modal-steps-list li > span:last-child {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 767px) {
+      main {
+        align-items: flex-start;
+        justify-content: center;
+        padding: 0.75rem;
+      }
+
+      #top-hud {
+        padding: 0.65rem 0.75rem 0.25rem;
+        align-items: stretch;
+      }
+
+      #top-hud > div {
+        min-width: 0;
+      }
+
+      #screen-start,
+      #screen-hub,
+      #screen-cook {
+        margin-block: 0.25rem 1rem;
+      }
+
+      #screen-start > div:first-child {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      #screen-start > div:first-child h1 {
+        font-size: clamp(1.45rem, 6.5vw, 2.35rem);
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+      }
+
+      #screen-start > div:nth-child(2) {
+        padding: 1rem;
+      }
+
+      #screen-start > div:nth-child(2) h2 {
+        flex-wrap: wrap;
+        line-height: 1.25;
+      }
+
+      #screen-hub > .grid,
+      #screen-cook > .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      #screen-hub .lg\:col-span-4,
+      #screen-hub .lg\:col-span-8,
+      #screen-cook .lg\:col-span-8,
+      #screen-cook .lg\:col-span-4 {
+        grid-column: auto;
+        min-width: 0;
+      }
+
+      #hub-character-svg {
+        flex: 0 0 5rem;
+        width: 5rem;
+      }
+
+      #book-items-grid {
+        max-height: none;
+        overflow: visible;
+        padding-right: 0;
+      }
+
+      #recipe-detail-modal > .kyrgyz-card,
+      #dastorkon-modal > .kyrgyz-card {
+        padding-top: 3.75rem;
+      }
+
+      #celebration-modal > .kyrgyz-card {
+        padding: 1.25rem;
+      }
+
+      #dastorkon-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      #screen-cook .wood-panel {
+        align-items: stretch;
+      }
+
+      #screen-cook .wood-panel > div:first-child {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      #screen-cook .wood-panel > div:last-child {
+        width: 100%;
+      }
+
+      #screen-cook .kyrgyz-card {
+        padding: 0.875rem;
+      }
+
+      #stage-instruction-title {
+        font-size: clamp(1rem, 4.5vw, 1.25rem);
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+
+      #stage-instruction-sub {
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+      }
+
+      #ingredient-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      #ingredient-buttons > button {
+        flex: 1 1 4.5rem;
+        min-width: 0;
+        max-width: calc(33.333% - 0.4rem);
+        padding: 0.5rem 0.35rem;
+      }
+
+      #ingredient-buttons > button span:last-child {
+        max-width: 100%;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+
+      #cooking-station-area button {
+        font-size: clamp(0.9rem, 3.8vw, 1.125rem);
+        padding: 0.75rem 1rem;
+      }
+
+      #recipe-detail-modal .flex-col > *,
+      #celebration-modal .flex-col > * {
+        min-width: 0;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 400px) {
+      main {
+        padding: 0.5rem;
+      }
+
+      #top-hud {
+        gap: 0.5rem;
+      }
+
+      #top-hud > div:first-child {
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      #top-hud > div:first-child > div:first-child {
+        padding-inline: 0.55rem;
+      }
+
+      #top-hud > div:last-child {
+        gap: 0.35rem;
+      }
+
+      #screen-start > div:nth-child(2) {
+        padding: 0.85rem;
+      }
+
+      #screen-start > div:nth-child(2) h2 {
+        font-size: 1.1rem;
+      }
+
+      #screen-start > div:nth-child(2) .grid > div {
+        padding: 0.75rem;
+      }
+
+      #screen-hub .kyrgyz-card,
+      #screen-hub .wood-panel {
+        padding: 0.75rem;
+      }
+
+      #hub-character-svg {
+        flex-basis: 4.25rem;
+        width: 4.25rem;
+      }
+
+      #book-category-title {
+        font-size: 1.35rem;
+        line-height: 1.25;
+      }
+
+      #recipe-detail-modal,
+      #celebration-modal,
+      #dastorkon-modal {
+        padding: 0.5rem;
+      }
+
+      #recipe-detail-modal > .kyrgyz-card,
+      #celebration-modal > .kyrgyz-card,
+      #dastorkon-modal > .kyrgyz-card {
+        border-radius: 1.25rem;
+        padding-inline: 0.85rem;
+      }
+
+      #recipe-detail-modal > .kyrgyz-card,
+      #dastorkon-modal > .kyrgyz-card {
+        padding-top: 3.5rem;
+      }
+
+      #cook-dish-title {
+        font-size: 1.05rem;
+        line-height: 1.25;
+      }
+
+      #screen-cook .wood-panel {
+        padding: 0.75rem;
+      }
+
+      #screen-cook .wood-panel > div:first-child {
+        gap: 0.5rem;
+      }
+
+      #screen-cook .wood-panel > div:first-child > div {
+        min-width: 0;
+      }
+
+      #screen-cook .kyrgyz-card {
+        padding: 0.7rem;
+      }
+
+      #ingredient-tray {
+        padding: 0.55rem;
+      }
+
+      #ingredient-buttons > button {
+        flex-basis: 4rem;
+        max-width: calc(33.333% - 0.35rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative text-amber-950">
+
+  <!-- Background Illustration: Jailoo + Yurt Interior Frame -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" class="w-full h-full">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#38bdf8" />
+          <stop offset="60%" stop-color="#bae6fd" />
+          <stop offset="100%" stop-color="#fef9c3" />
+        </linearGradient>
+        <linearGradient id="mountainGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="35%" stop-color="#93c5fd" />
+          <stop offset="100%" stop-color="#3b82f6" />
+        </linearGradient>
+        <linearGradient id="jailooGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#84cc16" />
+          <stop offset="50%" stop-color="#65a30d" />
+          <stop offset="100%" stop-color="#3f6212" />
+        </linearGradient>
+        <pattern id="shyrdakPattern" width="80" height="80" patternUnits="userSpaceOnUse">
+          <rect width="80" height="80" fill="#991b1b" />
+          <path d="M40 5 L55 20 L40 35 L25 20 Z" fill="none" stroke="#fbbf24" stroke-width="4" />
+          <path d="M40 45 L55 60 L40 75 L25 60 Z" fill="none" stroke="#fbbf24" stroke-width="4" />
+          <path d="M5 40 L20 25 L35 40 L20 55 Z" fill="none" stroke="#fef3c7" stroke-width="3" />
+          <path d="M45 40 L60 25 L75 40 L60 55 Z" fill="none" stroke="#fef3c7" stroke-width="3" />
+          <circle cx="40" cy="40" r="5" fill="#fbbf24" />
+        </pattern>
+        <pattern id="keregePattern" width="60" height="60" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="60" y2="60" stroke="#92400e" stroke-width="6" />
+          <line x1="60" y1="0" x2="0" y2="60" stroke="#b45309" stroke-width="6" />
+          <circle cx="30" cy="30" r="3" fill="#fef3c7" />
+        </pattern>
+      </defs>
+
+      <!-- Sky -->
+      <rect width="1440" height="520" fill="url(#skyGrad)" />
+      <!-- Sun -->
+      <circle cx="1180" cy="140" r="65" fill="#fde047" opacity="0.85" />
+      <!-- Ala-Too Mountains -->
+      <polygon points="0,420 180,190 360,380 540,150 760,390 980,170 1200,370 1440,210 1440,520 0,520" fill="url(#mountainGrad)" />
+      <!-- Snow Caps -->
+      <polygon points="180,190 135,245 165,240 180,260 205,240 225,250" fill="#ffffff" />
+      <polygon points="540,150 485,220 525,210 540,235 565,215 595,225" fill="#ffffff" />
+      <polygon points="980,170 925,235 960,225 980,250 1010,230 1035,240" fill="#ffffff" />
+
+      <!-- Green Jailoo Hills -->
+      <path d="M0,430 Q360,370 720,440 T1440,410 L1440,900 L0,900 Z" fill="url(#jailooGrad)" />
+      <path d="M0,520 Q480,470 960,540 T1440,510 L1440,900 L0,900 Z" fill="#4d7c0f" opacity="0.6" />
+
+      <!-- Distant Yurt on Jailoo -->
+      <g transform="translate(1070, 395) scale(0.65)">
+        <path d="M20,90 L180,90 L170,45 Q100,0 30,45 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3" />
+        <rect x="25" y="55" width="150" height="10" fill="#dc2626" />
+        <rect x="85" y="48" width="30" height="42" fill="#78350f" rx="3" />
+      </g>
+
+      <!-- Yurt Wooden Kerege Side Walls Framing the Screen -->
+      <rect x="0" y="0" width="90" height="900" fill="url(#keregePattern)" opacity="0.9" />
+      <rect x="1350" y="0" width="90" height="900" fill="url(#keregePattern)" opacity="0.9" />
+      <rect x="86" y="0" width="12" height="900" fill="#78350f" />
+      <rect x="1342" y="0" width="12" height="900" fill="#78350f" />
+
+      <!-- Shyrdak Floor Carpet -->
+      <polygon points="0,730 1440,730 1440,900 0,900" fill="url(#shyrdakPattern)" />
+      <rect x="0" y="724" width="1440" height="14" fill="#fbbf24" />
+    </svg>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas" class="fixed inset-0 z-50 pointer-events-none"></canvas>
+
+  <!-- TOP HUD BAR (Hidden on Start Screen) -->
+  <header id="top-hud" class="hidden relative z-30 w-full px-3 sm:px-6 pt-3 pb-1 flex flex-wrap items-center justify-between gap-2">
+    <!-- Left: Character Avatar & Stars -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-2 bg-amber-950/90 border-2 border-amber-400 rounded-full py-1 px-3 shadow-lg">
+        <div id="hud-avatar" class="w-10 h-10 rounded-full bg-amber-100 border-2 border-amber-500 overflow-hidden flex items-center justify-center"></div>
+        <div class="leading-tight">
+          <div id="hud-char-name" class="text-amber-200 font-extrabold text-sm sm:text-base">Айым</div>
+          <div class="flex items-center gap-1 text-yellow-400 font-black text-sm sm:text-base">
+            <span>⭐</span>
+            <span id="hud-stars">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completed Dishes Counter -->
+      <button onclick="openDastorkonModal()" class="flex items-center gap-1.5 bg-red-800/95 hover:bg-red-700 text-amber-100 border-2 border-amber-400 rounded-full py-2 px-3.5 shadow-lg transition transform active:scale-95">
+        <span class="text-lg">🍽️</span>
+        <span class="font-bold text-xs sm:text-sm hidden md:inline">Дасторкон:</span>
+        <span id="hud-dishes-count" class="font-black text-yellow-300 text-sm sm:text-base">0</span>
+      </button>
+    </div>
+
+    <!-- Center Title Banner -->
+    <div class="hidden lg:flex items-center gap-2 bg-gradient-to-r from-red-800 via-red-700 to-red-800 border-2 border-amber-400 px-5 py-1.5 rounded-full shadow-lg">
+      <span class="text-amber-300 text-lg">❖</span>
+      <h1 class="text-amber-50 font-black text-lg tracking-wide">Кыргыздын улуттук даамдары</h1>
+      <span class="text-amber-300 text-lg">❖</span>
+    </div>
+
+    <!-- Right: Home, Sound Toggle -->
+    <div class="flex items-center gap-2">
+      <button onclick="goToHub()" title="Рецепт китепчеси" class="gold-btn text-amber-950 font-extrabold px-3.5 py-2 rounded-2xl shadow-md flex items-center gap-1.5 text-sm sm:text-base">
+        <span>📖</span>
+        <span class="hidden sm:inline">Китепче</span>
+      </button>
+      <button id="sound-toggle-btn" onclick="toggleSound()" title="Үндү күйгүзүү/өчүрүү" class="bg-amber-950/90 hover:bg-amber-900 text-amber-200 border-2 border-amber-400 p-2.5 rounded-2xl shadow-md text-lg leading-none">
+        🔊
+      </button>
+      <button onclick="goToStart()" title="Башкы бет" class="bg-amber-950/90 hover:bg-amber-900 text-amber-200 border-2 border-amber-400 p-2.5 rounded-2xl shadow-md text-lg leading-none">
+        🏠
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="relative z-20 flex-1 flex items-center justify-center p-3 sm:p-6">
+
+    <!-- ==================== 1. START SCREEN (CHARACTER SELECTION) ==================== -->
+    <section id="screen-start" class="w-full max-w-4xl mx-auto text-center pop-in">
+      <!-- Title Emblem -->
+      <div class="inline-block bg-gradient-to-r from-red-800 via-red-700 to-red-800 border-4 border-amber-400 rounded-3xl px-6 py-4 sm:px-10 sm:py-5 shadow-2xl mb-6">
+        <div class="text-amber-300 text-xs sm:text-sm font-extrabold uppercase tracking-widest mb-1">
+          ❖ iBilim • Билим берүүчү оюн ❖
+        </div>
+        <h1 class="text-2xl sm:text-4xl md:text-5xl font-black text-white drop-shadow">
+          Кыргыздын улуттук даамдары 🇰🇬
+        </h1>
+        <p class="text-amber-100 text-sm sm:text-base font-semibold mt-2 max-w-xl mx-auto">
+          Боз үйгө кош келиңиз! Улуттук тамак-аштарды, сүт азыктарын жана суусундуктарды кадам-кадам менен жасоону үйрөнөбүз!
+        </p>
+      </div>
+
+      <!-- Character Selection Box -->
+      <div class="kyrgyz-card rounded-3xl p-5 sm:p-8 max-w-2xl mx-auto">
+        <h2 class="text-xl sm:text-2xl font-black text-red-900 mb-5 flex items-center justify-center gap-2">
+          <span>✨</span> Каарманды тандаңыз: <span>✨</span>
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-7">
+          <!-- Character 1: Aiym -->
+          <div id="select-aiym" onclick="selectCharacter('aiym')" class="cursor-pointer rounded-3xl p-4 border-4 border-amber-500 bg-amber-50 hover:bg-amber-100 transition transform hover:-translate-y-1 shadow-md relative ring-4 ring-red-600">
+            <div class="absolute top-3 right-3 bg-red-600 text-white text-xs font-extrabold px-2.5 py-1 rounded-full shadow">
+              ✓ Тандалды
+            </div>
+            <div class="w-36 h-40 mx-auto mb-2 animate-float" id="svg-card-aiym"></div>
+            <h3 class="text-2xl font-black text-red-900">Айым</h3>
+            <p class="text-sm font-bold text-amber-800">Улуттук шөкүлө жана кемсел кийген кыз</p>
+          </div>
+
+          <!-- Character 2: Akyl -->
+          <div id="select-akyl" onclick="selectCharacter('akyl')" class="cursor-pointer rounded-3xl p-4 border-4 border-amber-300 bg-white/80 hover:bg-amber-50 transition transform hover:-translate-y-1 shadow-md relative">
+            <div class="hidden absolute top-3 right-3 bg-red-600 text-white text-xs font-extrabold px-2.5 py-1 rounded-full shadow">
+              ✓ Тандалды
+            </div>
+            <div class="w-36 h-40 mx-auto mb-2 animate-float" style="animation-delay: 0.4s;" id="svg-card-akyl"></div>
+            <h3 class="text-2xl font-black text-red-900">Акыл</h3>
+            <p class="text-sm font-bold text-amber-800">Ак калпак жана чепкен кийген жигит</p>
+          </div>
+        </div>
+
+        <button onclick="enterYurt()" class="gold-btn text-amber-950 font-black text-xl sm:text-2xl px-8 py-4 rounded-2xl shadow-xl w-full sm:w-auto flex items-center justify-center gap-3 mx-auto">
+          <span>⛺</span>
+          <span>Боз үйгө кирүү</span>
+          <span>➔</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== 2. MAIN YURT & RECIPE BOOK HUB ==================== -->
+    <section id="screen-hub" class="hidden w-full max-w-6xl mx-auto pop-in">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+        
+        <!-- Left Column: Character Host + Speech Bubble + Category Tabs -->
+        <div class="lg:col-span-4 flex flex-col justify-between gap-4">
+          <!-- Character Welcome Card -->
+          <div class="kyrgyz-card rounded-3xl p-4 flex items-center gap-3 relative">
+            <div id="hub-character-svg" class="w-24 h-28 sm:w-28 sm:h-32 shrink-0 animate-float"></div>
+            <div class="bg-white border-2 border-amber-400 rounded-2xl p-3 shadow-sm relative flex-1">
+              <div class="text-xs font-extrabold text-red-700 uppercase mb-0.5" id="hub-host-name">Айым:</div>
+              <p id="hub-speech-text" class="text-sm sm:text-base font-bold text-amber-950 leading-snug">
+                Боз үйүбүзгө кош келиңиз! Дасторкондогу рецепт китепчесинен каалаган даамды тандаңыз!
+              </p>
+            </div>
+          </div>
+
+          <!-- Category Navigation Buttons -->
+          <div class="wood-panel rounded-3xl p-4 flex flex-col gap-2.5 shadow-xl">
+            <div class="text-amber-300 font-extrabold text-xs uppercase tracking-wider px-2">
+              📖 Рецепт китепчесинин бөлүмдөрү:
+            </div>
+            <button onclick="setCategory('dishes')" id="tab-dishes" class="cat-tab w-full text-left px-4 py-3 rounded-2xl font-extrabold text-base flex items-center justify-between transition bg-amber-400 text-amber-950 shadow">
+              <span class="flex items-center gap-2.5"><span class="text-xl">🍲</span> Улуттук тамактар</span>
+              <span class="text-xs bg-red-700 text-white px-2 py-0.5 rounded-full">4</span>
+            </button>
+            <button onclick="setCategory('dairy')" id="tab-dairy" class="cat-tab w-full text-left px-4 py-3 rounded-2xl font-extrabold text-base flex items-center justify-between transition bg-amber-900/70 text-amber-100 hover:bg-amber-800">
+              <span class="flex items-center gap-2.5"><span class="text-xl">🥛</span> Сүт азыктары</span>
+              <span class="text-xs bg-amber-600 text-white px-2 py-0.5 rounded-full">4</span>
+            </button>
+            <button onclick="setCategory('drinks')" id="tab-drinks" class="cat-tab w-full text-left px-4 py-3 rounded-2xl font-extrabold text-base flex items-center justify-between transition bg-amber-900/70 text-amber-100 hover:bg-amber-800">
+              <span class="flex items-center gap-2.5"><span class="text-xl">🥤</span> Улуттук суусундуктар</span>
+              <span class="text-xs bg-amber-600 text-white px-2 py-0.5 rounded-full">4</span>
+            </button>
+            <button onclick="setCategory('kurut')" id="tab-kurut" class="cat-tab w-full text-left px-4 py-3 rounded-2xl font-extrabold text-base flex items-center justify-between transition bg-amber-900/70 text-amber-100 hover:bg-amber-800">
+              <span class="flex items-center gap-2.5"><span class="text-xl">⚪</span> Куруттун түрлөрү</span>
+              <span class="text-xs bg-amber-600 text-white px-2 py-0.5 rounded-full">6</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: Open Recipe Book -->
+        <div class="lg:col-span-8 kyrgyz-card rounded-3xl p-4 sm:p-6 flex flex-col justify-between relative">
+          <!-- Book Header -->
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-amber-300 pb-3 mb-4">
+            <div>
+              <span class="text-xs font-extrabold text-red-700 uppercase tracking-wider">Кыргыздын улуттук рецепт китепчеси</span>
+              <h2 id="book-category-title" class="text-2xl sm:text-3xl font-black text-amber-950">🍲 Улуттук тамактар</h2>
+            </div>
+            <div class="bg-amber-200/80 border border-amber-400 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-amber-900">
+              Даамды басып, жасоону үйрөнүңүз!
+            </div>
+          </div>
+
+          <!-- Items Grid -->
+          <div id="book-items-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto max-h-[58vh] pr-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. RECIPE DETAIL MODAL ==================== -->
+    <div id="recipe-detail-modal" class="hidden fixed inset-0 z-40 bg-black/65 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5">
+      <div class="kyrgyz-card rounded-3xl max-w-2xl w-full p-5 sm:p-7 relative pop-in max-h-[90vh] overflow-y-auto">
+        <button onclick="closeRecipeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-red-700 hover:bg-red-600 text-white font-black text-xl flex items-center justify-center shadow">
+          ✕
+        </button>
+
+        <div class="flex flex-col sm:flex-row items-center gap-4 border-b-2 border-amber-300 pb-4 mb-4">
+          <div id="modal-dish-icon" class="w-24 h-24 rounded-2xl bg-white border-2 border-amber-400 flex items-center justify-center text-5xl shadow-inner shrink-0">
+            🍲
+          </div>
+          <div class="text-center sm:text-left">
+            <span id="modal-dish-cat" class="inline-block bg-red-100 text-red-800 text-xs font-extrabold px-2.5 py-0.5 rounded-full mb-1">Улуттук тамак</span>
+            <h3 id="modal-dish-title" class="text-2xl sm:text-3xl font-black text-amber-950">Бешбармак</h3>
+            <p id="modal-dish-desc" class="text-sm sm:text-base font-semibold text-amber-800 mt-1">Кыргыздын эң сыйлуу улуттук тамагы.</p>
+          </div>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="mb-4">
+          <h4 class="font-black text-red-900 text-base mb-2 flex items-center gap-1.5">
+            <span>🧺</span> Керектүү азыктар:
+          </h4>
+          <div id="modal-ingredients-list" class="flex flex-wrap gap-2">
+            <!-- Badges -->
+          </div>
+        </div>
+
+        <!-- Steps -->
+        <div class="mb-6">
+          <h4 class="font-black text-red-900 text-base mb-2 flex items-center gap-1.5">
+            <span>📜</span> Даярдоо кадамдары:
+          </h4>
+          <ol id="modal-steps-list" class="space-y-2 text-sm sm:text-base font-bold text-amber-950 bg-white/80 p-3.5 rounded-2xl border border-amber-300">
+            <!-- Steps -->
+          </ol>
+        </div>
+
+        <!-- Action Button -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-end">
+          <button onclick="closeRecipeModal()" class="px-5 py-3 rounded-2xl font-extrabold bg-amber-200 hover:bg-amber-300 text-amber-950">
+            Артка кайтуу
+          </button>
+          <button id="modal-cook-btn" onclick="startCookingCurrentDish()" class="green-btn text-white font-black text-lg px-7 py-3 rounded-2xl shadow-lg flex items-center justify-center gap-2">
+            <span>👨‍🍳</span>
+            <span>Даярдап көрүү! (+20 ⭐)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 4. INTERACTIVE STEP-BY-STEP COOKING SCREEN ==================== -->
+    <section id="screen-cook" class="hidden w-full max-w-6xl mx-auto pop-in">
+      <!-- Top Progress Bar Banner -->
+      <div class="wood-panel rounded-3xl p-3 sm:p-4 mb-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl">
+        <div class="flex items-center gap-3">
+          <button onclick="goToHub()" class="bg-amber-200 hover:bg-amber-300 text-amber-950 font-extrabold px-3 py-1.5 rounded-xl text-sm flex items-center gap-1">
+            <span>⬅</span> Китепчеге
+          </button>
+          <div>
+            <div class="text-amber-300 text-xs font-extrabold uppercase">Тамак жасоо</div>
+            <h2 id="cook-dish-title" class="text-white font-black text-lg sm:text-2xl">Бешбармак жасайбыз</h2>
+          </div>
+        </div>
+
+        <!-- Step Progress Meter -->
+        <div class="w-full sm:w-80 bg-amber-950 p-2 rounded-2xl border border-amber-500">
+          <div class="flex justify-between text-xs font-extrabold text-amber-200 mb-1 px-1">
+            <span id="cook-step-label">Учурдагы кадам: 1/4</span>
+            <span id="cook-step-percent">25%</span>
+          </div>
+          <div class="w-full h-3.5 bg-amber-900 rounded-full overflow-hidden p-0.5">
+            <div id="cook-progress-fill" class="h-full bg-gradient-to-r from-lime-400 to-green-500 rounded-full transition-all duration-300" style="width: 25%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Cooking Workspace -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        
+        <!-- Left & Center: Interactive Cooking Stage (8 cols) -->
+        <div class="lg:col-span-8 kyrgyz-card rounded-3xl p-4 sm:p-6 flex flex-col justify-between min-h-[410px] relative overflow-hidden">
+          <!-- Stage Header Instruction -->
+          <div class="bg-amber-100 border-2 border-amber-400 rounded-2xl p-3 text-center mb-3 shadow-sm">
+            <h3 id="stage-instruction-title" class="text-lg sm:text-xl font-black text-red-900">
+              1-кадам. Керектүү азыктарды тандаңыз!
+            </h3>
+            <p id="stage-instruction-sub" class="text-xs sm:text-sm font-bold text-amber-800">
+              Туура азыктарды басып, казанга салыңыз (ашыкча азыктарды кошпоңуз!).
+            </p>
+          </div>
+
+          <!-- Dynamic Interactive Canvas / Station Area -->
+          <div id="cooking-station-area" class="flex-1 flex flex-col items-center justify-center relative my-2">
+            <!-- Rendered dynamically based on current step -->
+          </div>
+
+          <!-- Ingredient Tray (Shown in Step 1) -->
+          <div id="ingredient-tray" class="hidden bg-amber-900/15 border-2 border-amber-400 rounded-2xl p-3 mt-2">
+            <div class="text-xs font-extrabold text-amber-900 uppercase mb-2 text-center">
+              Дасторкондогу азыктар (туурасын басыңыз):
+            </div>
+            <div id="ingredient-buttons" class="flex flex-wrap justify-center gap-2.5">
+              <!-- Ingredient cards -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Character Helper & Recipe Checklist (4 cols) -->
+        <div class="lg:col-span-4 flex flex-col justify-between gap-4">
+          <!-- Helper Character Speech -->
+          <div class="kyrgyz-card rounded-3xl p-4 flex items-center gap-3">
+            <div id="cook-char-svg" class="w-20 h-24 shrink-0"></div>
+            <div id="cook-speech-box" class="bg-white border-2 border-amber-400 rounded-2xl p-3 flex-1 shadow-sm transition-all">
+              <div class="text-xs font-extrabold text-red-700 mb-0.5" id="cook-char-name">Айым:</div>
+              <p id="cook-speech-text" class="text-sm font-bold text-amber-950 leading-snug">
+                Кел, биргелешип эң даамдуу тамак жасайлы!
+              </p>
+            </div>
+          </div>
+
+          <!-- Recipe Steps Checklist Card -->
+          <div class="kyrgyz-card rounded-3xl p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <h4 class="font-black text-red-900 text-base border-b-2 border-amber-300 pb-2 mb-3 flex items-center gap-2">
+                <span>📋</span> Кадам-кадам жасалышы:
+              </h4>
+              <ul id="cook-steps-checklist" class="space-y-2.5 text-sm font-bold">
+                <!-- Populated by JS -->
+              </ul>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-amber-300 text-center text-xs font-extrabold text-amber-800">
+              Ар бир кадам үчүн +5 ⭐ берилет!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== 5. CELEBRATION MODAL ("Тамагыңыз таттуу болсун!") ==================== -->
+  <div id="celebration-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="kyrgyz-card rounded-3xl max-w-lg w-full p-6 sm:p-8 text-center relative pop-in border-4 border-amber-400">
+      <div class="inline-block bg-green-600 text-white font-black text-xs uppercase tracking-widest px-4 py-1 rounded-full mb-3 shadow">
+        ✨ Азаматсыз! +20 ⭐ упай ✨
+      </div>
+
+      <h2 class="text-2xl sm:text-4xl font-black text-red-800 mb-2">
+        Тамагыңыз таттуу болсун!
+      </h2>
+      <p id="celebration-dish-msg" class="text-lg sm:text-xl font-extrabold text-amber-900 mb-5">
+        Бешбармак даяр болду!
+      </p>
+
+      <!-- Plated Dish Badge -->
+      <div class="w-36 h-36 mx-auto mb-6 rounded-full bg-gradient-to-b from-amber-100 to-amber-300 border-4 border-amber-500 shadow-xl flex items-center justify-center relative animate-float">
+        <span id="celebration-dish-emoji" class="text-7xl">🍲</span>
+        <span class="absolute -bottom-2 bg-red-700 text-amber-100 text-xs font-black px-3 py-1 rounded-full border border-amber-300">
+          Дасторкондо!
+        </span>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button onclick="closeCelebrationAndViewDastorkon()" class="gold-btn text-amber-950 font-black px-5 py-3.5 rounded-2xl shadow-md flex items-center justify-center gap-2">
+          <span>🍽️</span>
+          <span>Дасторконду көрүү</span>
+        </button>
+        <button onclick="closeCelebrationAndContinue()" class="green-btn text-white font-black px-5 py-3.5 rounded-2xl shadow-md flex items-center justify-center gap-2">
+          <span>📖</span>
+          <span>Дагы тамак жасоо</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 6. DASTORKON (COMPLETED DISHES) MODAL ==================== -->
+  <div id="dastorkon-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="kyrgyz-card rounded-3xl max-w-2xl w-full p-6 relative pop-in">
+      <button onclick="closeDastorkonModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-red-700 text-white font-black text-xl flex items-center justify-center">
+        ✕
+      </button>
+      <h2 class="text-2xl sm:text-3xl font-black text-red-900 mb-1 text-center">
+        🍽️ Сиздин берекелүү дасторконуңуз
+      </h2>
+      <p class="text-center text-sm font-bold text-amber-800 mb-5">
+        Сиз өз колуңуз менен даярдаган улуттук даамдар:
+      </p>
+
+      <div id="dastorkon-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[55vh] overflow-y-auto p-2 bg-amber-900/10 rounded-2xl border border-amber-300">
+        <!-- Populated by JS -->
+      </div>
+
+      <div class="mt-5 text-center">
+        <button onclick="closeDastorkonModal()" class="gold-btn text-amber-950 font-black px-8 py-3 rounded-2xl">
+          Улантуу
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==================== AUDIO ENGINE (WEB AUDIO API - KOMUZ PLUCKS & CHIMES) ==================== */
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playKomuzPluck(freq = 330, duration = 0.35) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.99, audioCtx.currentTime + duration);
+
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playSuccessChord() {
+      if (!soundEnabled) return;
+      const notes = [293.66, 369.99, 440.00, 587.33]; // D major komuz tuning feel
+      notes.forEach((n, idx) => {
+        setTimeout(() => playKomuzPluck(n, 0.5), idx * 90);
+      });
+    }
+
+    function playErrorBuzz() {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch (e) {}
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-toggle-btn').textContent = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) playKomuzPluck(440, 0.2);
+    }
+
+    /* ==================== SVG CHARACTER ILLUSTRATIONS ==================== */
+    function getCharacterSVG(charId) {
+      if (charId === 'aiym') {
+        return `
+        <svg viewBox="0 0 160 180" class="w-full h-full drop-shadow-md">
+          <!-- Braids -->
+          <path d="M52,95 Q42,130 48,160" stroke="#1f2937" stroke-width="8" stroke-linecap="round" fill="none"/>
+          <path d="M108,95 Q118,130 112,160" stroke="#1f2937" stroke-width="8" stroke-linecap="round" fill="none"/>
+          <circle cx="48" cy="160" r="4" fill="#fbbf24"/>
+          <circle cx="112" cy="160" r="4" fill="#fbbf24"/>
+          <!-- Traditional Dress & Red Kemsel -->
+          <path d="M40,175 L52,115 L108,115 L120,175 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+          <path d="M46,175 L55,115 L73,115 L70,175 Z" fill="#b91c1c"/>
+          <path d="M114,175 L105,115 L87,115 L90,175 Z" fill="#b91c1c"/>
+          <!-- Gold Oimo Trim on Kemsel -->
+          <path d="M68,120 L66,170 M92,120 L94,170" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4 3"/>
+          <!-- Neck & Head -->
+          <rect x="72" y="98" width="16" height="18" rx="6" fill="#fed7aa"/>
+          <circle cx="80" cy="74" r="30" fill="#fed7aa"/>
+          <!-- Hair Bangs -->
+          <path d="M50,70 Q52,42 80,42 Q108,42 110,70 Q95,55 80,62 Q65,55 50,70 Z" fill="#1f2937"/>
+          <!-- Eyes & Smile -->
+          <circle cx="69" cy="75" r="4" fill="#1f2937"/>
+          <circle cx="91" cy="75" r="4" fill="#1f2937"/>
+          <circle cx="70.5" cy="73.5" r="1.5" fill="#ffffff"/>
+          <circle cx="92.5" cy="73.5" r="1.5" fill="#ffffff"/>
+          <circle cx="62" cy="83" r="4" fill="#fca5a5" opacity="0.7"/>
+          <circle cx="98" cy="83" r="4" fill="#fca5a5" opacity="0.7"/>
+          <path d="M72,86 Q80,94 88,86" stroke="#991b1b" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <!-- Traditional Saukele / Tebetei Hat -->
+          <path d="M52,55 L64,16 L96,16 L108,55 Z" fill="#dc2626" stroke="#fbbf24" stroke-width="2.5"/>
+          <ellipse cx="80" cy="56" rx="33" ry="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+          <!-- Owl Feathers (Ukü) on top -->
+          <path d="M80,16 Q72,2 66,6 M80,16 Q80,0 80,4 M80,16 Q88,2 94,6" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="80" cy="36" r="4" fill="#fbbf24"/>
+        </svg>`;
+      } else {
+        return `
+        <svg viewBox="0 0 160 180" class="w-full h-full drop-shadow-md">
+          <!-- Traditional Chepken Coat -->
+          <path d="M38,175 L50,114 L110,114 L122,175 Z" fill="#1e3a8a" stroke="#fbbf24" stroke-width="2.5"/>
+          <path d="M74,114 L80,175 L86,114 Z" fill="#fef3c7"/>
+          <path d="M62,125 L60,170 M98,125 L100,170" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="5 3"/>
+          <!-- Neck & Head -->
+          <rect x="72" y="98" width="16" height="18" rx="6" fill="#fed7aa"/>
+          <circle cx="80" cy="75" r="30" fill="#fed7aa"/>
+          <!-- Hair -->
+          <path d="M51,68 Q55,46 80,46 Q105,46 109,68" fill="#1f2937"/>
+          <!-- Eyes & Smile -->
+          <circle cx="69" cy="75" r="4" fill="#1f2937"/>
+          <circle cx="91" cy="75" r="4" fill="#1f2937"/>
+          <circle cx="70.5" cy="73.5" r="1.5" fill="#ffffff"/>
+          <circle cx="92.5" cy="73.5" r="1.5" fill="#ffffff"/>
+          <path d="M72,87 Q80,95 88,87" stroke="#991b1b" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <!-- Ak Kalpak (Traditional Kyrgyz White Felt Hat) -->
+          <path d="M52,55 L64,14 L80,22 L96,14 L108,55 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+          <path d="M46,56 Q63,46 80,55 Q97,46 114,56 L108,62 Q80,54 52,62 Z" fill="#1e293b"/>
+          <path d="M64,20 L64,52 M96,20 L96,52" stroke="#1e3a8a" stroke-width="2"/>
+          <circle cx="80" cy="14" r="3.5" fill="#1e3a8a"/>
+        </svg>`;
+      }
+    }
+
+    /* ==================== RECIPE & GAME DATABASE ==================== */
+    const RECIPES_DB = {
+      dishes: [
+        {
+          id: 'beshbarmak',
+          category: 'dishes',
+          categoryLabel: 'Улуттук тамак',
+          name: 'Бешбармак',
+          emoji: '🍲',
+          desc: 'Эт, шорпо жана камырдан жасалган кыргыздын эң сыйлуу улуттук тамагы.',
+          ingredients: [
+            { id: 'meat', name: 'Эт', emoji: '🥩', correct: true },
+            { id: 'flour', name: 'Ун', emoji: '🌾', correct: true },
+            { id: 'onion', name: 'Пияз', emoji: '🧅', correct: true },
+            { id: 'egg', name: 'Жумуртка', emoji: '🥚', correct: true },
+            { id: 'water', name: 'Суу', emoji: '💧', correct: true },
+            { id: 'candy', name: 'Момпосуй', emoji: '🍬', correct: false },
+            { id: 'soda', name: 'Газдалган суу', emoji: '🥤', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Керектүү азыктарды даярдоо', desc: 'Эт, ун, пияз, жумуртка жана сууну тандап казанга салыңыз.' },
+            { type: 'boil', title: 'Этти сууга салып бышыруу', desc: 'Казандагы этти кайнатып бышырыңыз (баскычты басып туруңуз же тез-тез басыңыз).' },
+            { type: 'dough', title: 'Камырды жууруп, жаюу', desc: 'Үбөлүк менен камырды жука кылып жайыңыз.' },
+            { type: 'plate', title: 'Даяр тамакты дасторконго коюу', desc: 'Бышкан камыр менен этти кооз табакка салып кооздоңуз!' }
+          ]
+        },
+        {
+          id: 'boorsok',
+          category: 'dishes',
+          categoryLabel: 'Улуттук тамак',
+          name: 'Боорсок',
+          emoji: '🥯',
+          desc: 'Майга бышырылган, дасторкондун көркүн ачкан кызарган даамдуу камыр тамак.',
+          ingredients: [
+            { id: 'flour', name: 'Ун', emoji: '🌾', correct: true },
+            { id: 'milk', name: 'Сүт', emoji: '🥛', correct: true },
+            { id: 'egg', name: 'Жумуртка', emoji: '🥚', correct: true },
+            { id: 'oil', name: 'Май', emoji: '🫗', correct: true },
+            { id: 'lemon', name: 'Лимон', emoji: '🍋', correct: false },
+            { id: 'fish', name: 'Балык', emoji: '🐟', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Боорсоктун азыктарын чогултуу', desc: 'Ун, сүт, жумуртка жана майды тандаңыз.' },
+            { type: 'dough', title: 'Камыр жууруу жана кесүү', desc: 'Камырды жууруп, төрт бурчтук кылып жайыңыз.' },
+            { type: 'boil', title: 'Кызыган майга бышыруу', desc: 'Боорсокторду алтын түскө келгенче майга бышырыңыз.' },
+            { type: 'plate', title: 'Дасторконго коюу', desc: 'Ысык боорсокторду табакка салып дасторконго коюңуз!' }
+          ]
+        },
+        {
+          id: 'kuurdak',
+          category: 'dishes',
+          categoryLabel: 'Улуттук тамак',
+          name: 'Куурдак',
+          emoji: '🥘',
+          desc: 'Эт, картошка жана пиязды казанга кууруп жасалган абдан тоюмдуу тамак.',
+          ingredients: [
+            { id: 'meat', name: 'Эт', emoji: '🥩', correct: true },
+            { id: 'potato', name: 'Картошка', emoji: '🥔', correct: true },
+            { id: 'onion', name: 'Пияз', emoji: '🧅', correct: true },
+            { id: 'oil', name: 'Май', emoji: '🫗', correct: true },
+            { id: 'icecream', name: 'Балмуздак', emoji: '🍦', correct: false },
+            { id: 'banana', name: 'Банан', emoji: '🍌', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Куурдактын азыктарын даярдоо', desc: 'Эт, картошка, пияз жана майды тандаңыз.' },
+            { type: 'boil', title: 'Казанга кууруу', desc: 'Отту жагып, эт менен картошканы кызарта кууруңуз.' },
+            { type: 'plate', title: 'Дасторконго тартуу', desc: 'Ысык куурдакты кооз тарелкага салыңыз!' }
+          ]
+        },
+        {
+          id: 'manty',
+          category: 'dishes',
+          categoryLabel: 'Улуттук тамак',
+          name: 'Манты',
+          emoji: '🥟',
+          desc: 'Жука камырга тууралган эт жана пияз оролуп, бууга бышырылган тамак.',
+          ingredients: [
+            { id: 'flour', name: 'Ун', emoji: '🌾', correct: true },
+            { id: 'meat', name: 'Тууралган эт', emoji: '🥩', correct: true },
+            { id: 'onion', name: 'Пияз', emoji: '🧅', correct: true },
+            { id: 'water', name: 'Суу', emoji: '💧', correct: true },
+            { id: 'strawberry', name: 'Кулпунай', emoji: '🍓', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Азыктарды даярдоо', desc: 'Ун, эт, пияз жана сууну тандаңыз.' },
+            { type: 'dough', title: 'Камыр жаюу жана түйүү', desc: 'Камырды жука жайып, мантыларды түйүңүз.' },
+            { type: 'boil', title: 'Касканда бууга бышыруу', desc: 'Мантыларды бууга бышырыңыз.' },
+            { type: 'plate', title: 'Дасторконго коюу', desc: 'Бышкан мантыларды табакка тизиңиз!' }
+          ]
+        }
+      ],
+      dairy: [
+        {
+          id: 'kymyz',
+          category: 'dairy',
+          categoryLabel: 'Сүт азыгы',
+          name: 'Кымыз',
+          emoji: '🍶',
+          desc: 'Бээнин сүтүн сабага куюп, бишкек менен бышып даярдалган шипалуу суусундук.',
+          ingredients: [
+            { id: 'mare_milk', name: 'Бээнин сүтү', emoji: '🥛', correct: true },
+            { id: 'starter', name: 'Көрөңгө (уютку)', emoji: '🫙', correct: true },
+            { id: 'candy', name: 'Кәмпит', emoji: '🍬', correct: false },
+            { id: 'tomato', name: 'Помидор', emoji: '🍅', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Сабага сүт куюу', desc: 'Бээнин сүтүн жана көрөңгөнү тандаңыз.' },
+            { type: 'churn', title: 'Бишкек менен кымыз бышуу', desc: 'Сабадагы кымызды бишкек менен өйдө-ылдый бышыңыз!' },
+            { type: 'plate', title: 'Чыныга куюп сунуу', desc: 'Даяр болгон кымызды кооз кесеге куюңуз!' }
+          ]
+        },
+        {
+          id: 'sary_mai',
+          category: 'dairy',
+          categoryLabel: 'Сүт азыгы',
+          name: 'Сары май',
+          emoji: '🧈',
+          desc: 'Каймактан май уютуп, бөлүп алынган эң пайдалуу жана күчтүү азык.',
+          ingredients: [
+            { id: 'cream', name: 'Каймак', emoji: '🥣', correct: true },
+            { id: 'salt', name: 'Бир чымчым туз', emoji: '🧂', correct: true },
+            { id: 'apple', name: 'Алма', emoji: '🍎', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Каймакты даярдоо', desc: 'Каймак менен тузду тандаңыз.' },
+            { type: 'churn', title: 'Майды чалуу (бышуу)', desc: 'Каймакты чалып, сары майын бөлүп алыңыз.' },
+            { type: 'plate', title: 'Идишке салуу', desc: 'Таза сары майды идишке салып дасторконго коюңуз!' }
+          ]
+        },
+        {
+          id: 'airan',
+          category: 'dairy',
+          categoryLabel: 'Сүт азыгы',
+          name: 'Айран',
+          emoji: '🥛',
+          desc: 'Жылуу сүткө уютку кошуп, жылуу ороп уютулган сергитүүчү сүт азыгы.',
+          ingredients: [
+            { id: 'milk', name: 'Бышкан сүт', emoji: '🥛', correct: true },
+            { id: 'starter', name: 'Уютку', emoji: '🥄', correct: true },
+            { id: 'potato', name: 'Картошка', emoji: '🥔', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Сүт жана уютку', desc: 'Бышкан сүттү жана уюткуну тандаңыз.' },
+            { type: 'boil', title: 'Сүттү жылытып уютуу', desc: 'Сүттү жылуу кармап уютуңуз.' },
+            { type: 'plate', title: 'Кесеге куюу', desc: 'Коюу айранды кесеге куюп дасторконго коюңуз!' }
+          ]
+        },
+        {
+          id: 'kaimak',
+          category: 'dairy',
+          categoryLabel: 'Сүт азыгы',
+          name: 'Каймак',
+          emoji: '🥣',
+          desc: 'Сүттү жай отко кайнатып, бетине чыккан коюу, таттуу катмарын калпып алышат.',
+          ingredients: [
+            { id: 'milk', name: 'Жаңы саалган сүт', emoji: '🥛', correct: true },
+            { id: 'onion', name: 'Пияз', emoji: '🧅', correct: false },
+            { id: 'candy', name: 'Момпосуй', emoji: '🍬', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Жаңы сүт алуу', desc: 'Жаңы саалган сүттү тандаңыз.' },
+            { type: 'boil', title: 'Сүттү жай кайнатуу', desc: 'Сүттү бышырып, бетине каймак тургузуңуз.' },
+            { type: 'plate', title: 'Каймакты калпып алуу', desc: 'Жаңы каймакты чыныга салып дасторконго коюңуз!' }
+          ]
+        }
+      ],
+      drinks: [
+        {
+          id: 'maksym',
+          category: 'drinks',
+          categoryLabel: 'Улуттук суусундук',
+          name: 'Максым',
+          emoji: '🍺',
+          desc: 'Куурулган арпа, буудай талканынан кайнатылып, ачытылган улуттук суусундук.',
+          ingredients: [
+            { id: 'talkan', name: 'Куурулган талкан', emoji: '🌾', correct: true },
+            { id: 'water', name: 'Суу', emoji: '💧', correct: true },
+            { id: 'starter', name: 'Уютку', emoji: '🫙', correct: true },
+            { id: 'soda', name: 'Газдалган суу', emoji: '🥤', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Азыктарды тандоо', desc: 'Куурулган талкан, суу жана уюткуну тандаңыз.' },
+            { type: 'boil', title: 'Талканды кайнатуу', desc: 'Сууга талканды салып жай отто бышырыңыз.' },
+            { type: 'plate', title: 'Муздатып сунуу', desc: 'Муздак максымды чыныга куюп дасторконго коюңуз!' }
+          ]
+        },
+        {
+          id: 'jarma',
+          category: 'drinks',
+          categoryLabel: 'Улуттук суусундук',
+          name: 'Жарма',
+          emoji: '🥛',
+          desc: 'Талканды сууга бышырып, муздатып, айран же сүзмө кошуп даярдалган суусундук.',
+          ingredients: [
+            { id: 'talkan', name: 'Талкан', emoji: '🌾', correct: true },
+            { id: 'airan', name: 'Айран', emoji: '🥛', correct: true },
+            { id: 'water', name: 'Суу', emoji: '💧', correct: true },
+            { id: 'lemon', name: 'Лимон', emoji: '🍋', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Талкан жана айран', desc: 'Талкан, суу жана айранды тандаңыз.' },
+            { type: 'boil', title: 'Бышыруу жана аралаштыруу', desc: 'Талканды бышырып, айран кошуп аралаштырыңыз.' },
+            { type: 'plate', title: 'Дасторконго коюу', desc: 'Сергитүүчү жарманы кесеге куюңуз!' }
+          ]
+        },
+        {
+          id: 'bozo',
+          category: 'drinks',
+          categoryLabel: 'Улуттук суусундук',
+          name: 'Бозо',
+          emoji: '🏺',
+          desc: 'Таруу, жүгөрү же буудайдан угут кошулуп ачытылган жылуу жана күчтүү суусундук.',
+          ingredients: [
+            { id: 'millet', name: 'Таруу / Дан', emoji: '🌾', correct: true },
+            { id: 'ugut', name: 'Угут', emoji: '🌱', correct: true },
+            { id: 'water', name: 'Суу', emoji: '💧', correct: true },
+            { id: 'icecream', name: 'Балмуздак', emoji: '🍦', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Дан жана угут', desc: 'Таруу, угут жана сууну тандаңыз.' },
+            { type: 'boil', title: 'Кайнатып ачытуу', desc: 'Данды бышырып, угут кошуп даярдаңыз.' },
+            { type: 'plate', title: 'Чыныга куюу', desc: 'Даяр болгон бозону дасторконго коюңуз!' }
+          ]
+        },
+        {
+          id: 'sherbet',
+          category: 'drinks',
+          categoryLabel: 'Улуттук суусундук',
+          name: 'Шербет',
+          emoji: '🧃',
+          desc: 'Таттуу мөмө-жемиштерден жана балдан даярдалган ширин улуттук суусундук.',
+          ingredients: [
+            { id: 'berries', name: 'Мөмө-жемиштер', emoji: '🍒', correct: true },
+            { id: 'honey', name: 'Тоо балы', emoji: '🍯', correct: true },
+            { id: 'water', name: 'Таза суу', emoji: '💧', correct: true },
+            { id: 'onion', name: 'Пияз', emoji: '🧅', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Жемиштерди тандоо', desc: 'Мөмө-жемиштер, бал жана сууну тандаңыз.' },
+            { type: 'boil', title: 'Шербет кайнатуу', desc: 'Жемиштерди кайнатып, бал кошуңуз.' },
+            { type: 'plate', title: 'Дасторконго сунуу', desc: 'Таттуу шербетти кооз чыныга куюңуз!' }
+          ]
+        }
+      ],
+      kurut: [
+        {
+          id: 'yshtalgan_kurut',
+          category: 'kurut',
+          categoryLabel: 'Куруттун түрү',
+          name: 'Ышталган курут',
+          emoji: '🟤',
+          desc: 'Арчанын же тобулгунун түтүнүнө ышталып, өзгөчө жыт жана даам берген курут.',
+          ingredients: [
+            { id: 'suzmo', name: 'Сүзмө', emoji: '🥣', correct: true },
+            { id: 'salt', name: 'Туз', emoji: '🧂', correct: true },
+            { id: 'candy', name: 'Кәмпит', emoji: '🍬', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Сүзмө жана туз', desc: 'Сүзмө менен тузду тандаңыз.' },
+            { type: 'kurut_shape', title: 'Курут тоголоктоо', desc: 'Сүзмөнү тоголоктоп, чийге тизип кургатыңыз.' },
+            { type: 'plate', title: 'Тарелкага салуу', desc: 'Ышталган куруттарды дасторконго коюңуз!' }
+          ]
+        },
+        {
+          id: 'mai_kurut',
+          category: 'kurut',
+          categoryLabel: 'Куруттун түрү',
+          name: 'Май курут',
+          emoji: '🟡',
+          desc: 'Сүзмөгө сары май же каймак кошулуп жасалган жумшак жана майлуу курут.',
+          ingredients: [
+            { id: 'suzmo', name: 'Сүзмө', emoji: '🥣', correct: true },
+            { id: 'butter', name: 'Сары май', emoji: '🧈', correct: true },
+            { id: 'lemon', name: 'Лимон', emoji: '🍋', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Сүзмө жана сары май', desc: 'Сүзмө менен сары майды тандаңыз.' },
+            { type: 'kurut_shape', title: 'Май курут жасоо', desc: 'Аралашманы тоголоктоп формага келтириңиз.' },
+            { type: 'plate', title: 'Дасторконго коюу', desc: 'Май куруттарды кооз тарелкага салыңыз!' }
+          ]
+        },
+        {
+          id: 'chobogo_kurut',
+          category: 'kurut',
+          categoryLabel: 'Куруттун түрү',
+          name: 'Чөбөгө курут',
+          emoji: '🟠',
+          desc: 'Сары май сызгырганда калган чөбөгөнү сүзмөгө кошуп жасалган таттуу курут.',
+          ingredients: [
+            { id: 'suzmo', name: 'Сүзмө', emoji: '🥣', correct: true },
+            { id: 'chobogo', name: 'Чөбөгө', emoji: '🍯', correct: true },
+            { id: 'fish', name: 'Балык', emoji: '🐟', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Сүзмө жана чөбөгө', desc: 'Сүзмө менен чөбөгөнү тандаңыз.' },
+            { type: 'kurut_shape', title: 'Тоголоктоо', desc: 'Чөбөгө куруттарды кол менен тоголоктоңуз.' },
+            { type: 'plate', title: 'Дасторконго коюу', desc: 'Даамдуу чөбөгө куруттарды тарелкага коюңуз!' }
+          ]
+        },
+        {
+          id: 'tuzduu_kurut',
+          category: 'kurut',
+          categoryLabel: 'Куруттун түрү',
+          name: 'Туздуу курут',
+          emoji: '⚪',
+          desc: 'Тузу көбүрөөк кошулуп, узак убакытка сакталуучу салттуу курут.',
+          ingredients: [
+            { id: 'suzmo', name: 'Сүзмө', emoji: '🥣', correct: true },
+            { id: 'salt', name: 'Туз', emoji: '🧂', correct: true },
+            { id: 'banana', name: 'Банан', emoji: '🍌', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Сүзмө жана туз', desc: 'Сүзмө менен тузду тандаңыз.' },
+            { type: 'kurut_shape', title: 'Курут жасоо', desc: 'Сүзмөнү тоголоктоп кургатууга даярдаңыз.' },
+            { type: 'plate', title: 'Дасторконго коюу', desc: 'Туздуу куруттарды табакка салыңыз!' }
+          ]
+        },
+        {
+          id: 'kurgak_kurut',
+          category: 'kurut',
+          categoryLabel: 'Куруттун түрү',
+          name: 'Кургак курут',
+          emoji: '🔘',
+          desc: 'Күнгө жакшылап кургатылган, кышында шорпого эзип ичүүгө ыңгайлуу катуу курут.',
+          ingredients: [
+            { id: 'suzmo', name: 'Сүзмө', emoji: '🥣', correct: true },
+            { id: 'salt', name: 'Туз', emoji: '🧂', correct: true },
+            { id: 'soda', name: 'Газдалган суу', emoji: '🥤', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Азыктарды тандоо', desc: 'Сүзмө менен тузду тандаңыз.' },
+            { type: 'kurut_shape', title: 'Чийге тизип кургатуу', desc: 'Куруттарды тоголоктоп, күнгө кургатыңыз.' },
+            { type: 'plate', title: 'Дасторконго коюу', desc: 'Кургак куруттарды тарелкага салыңыз!' }
+          ]
+        },
+        {
+          id: 'ak_kurut',
+          category: 'kurut',
+          categoryLabel: 'Куруттун түрү',
+          name: 'Ак курут',
+          emoji: '⚪',
+          desc: 'Аппак сүзмөдөн тузу аз кошулуп, көлөкөдө кургатылган назик ак курут.',
+          ingredients: [
+            { id: 'suzmo', name: 'Ак сүзмө', emoji: '🥛', correct: true },
+            { id: 'salt', name: 'Аз өлчөмдө туз', emoji: '🧂', correct: true },
+            { id: 'tomato', name: 'Помидор', emoji: '🍅', correct: false }
+          ],
+          steps: [
+            { type: 'gather', title: 'Ак сүзмө тандоо', desc: 'Ак сүзмө жана тузду тандаңыз.' },
+            { type: 'kurut_shape', title: 'Тоголоктоо', desc: 'Аппак куруттарды тоголоктоп жасаңыз.' },
+            { type: 'plate', title: 'Дасторконго коюу', desc: 'Ак куруттарды кооз тарелкага коюңуз!' }
+          ]
+        }
+      ]
+    };
+
+    /* ==================== GAME STATE ==================== */
+    let state = {
+      character: 'aiym', // 'aiym' | 'akyl'
+      stars: 0,
+      currentCategory: 'dishes',
+      selectedRecipe: null,
+      cookingStepIndex: 0,
+      gatheredIds: [],
+      stepProgress: 0,
+      completedDishes: []
+    };
+
+    /* ==================== INITIALIZATION ==================== */
+    window.onload = function () {
+      document.getElementById('svg-card-aiym').innerHTML = getCharacterSVG('aiym');
+      document.getElementById('svg-card-akyl').innerHTML = getCharacterSVG('akyl');
+      updateCharacterUI();
+    };
+
+    function selectCharacter(charId) {
+      playKomuzPluck(charId === 'aiym' ? 440 : 330, 0.25);
+      state.character = charId;
+
+      const aiymCard = document.getElementById('select-aiym');
+      const akylCard = document.getElementById('select-akyl');
+
+      if (charId === 'aiym') {
+        aiymCard.classList.add('ring-4', 'ring-red-600', 'bg-amber-50', 'border-amber-500');
+        aiymCard.classList.remove('bg-white/80', 'border-amber-300');
+        aiymCard.querySelector('div').classList.remove('hidden');
+
+        akylCard.classList.remove('ring-4', 'ring-red-600', 'bg-amber-50', 'border-amber-500');
+        akylCard.classList.add('bg-white/80', 'border-amber-300');
+        akylCard.querySelector('div').classList.add('hidden');
+      } else {
+        akylCard.classList.add('ring-4', 'ring-red-600', 'bg-amber-50', 'border-amber-500');
+        akylCard.classList.remove('bg-white/80', 'border-amber-300');
+        akylCard.querySelector('div').classList.remove('hidden');
+
+        aiymCard.classList.remove('ring-4', 'ring-red-600', 'bg-amber-50', 'border-amber-500');
+        aiymCard.classList.add('bg-white/80', 'border-amber-300');
+        aiymCard.querySelector('div').classList.add('hidden');
+      }
+      updateCharacterUI();
+    }
+
+    function updateCharacterUI() {
+      const name = state.character === 'aiym' ? 'Айым' : 'Акыл';
+      const svg = getCharacterSVG(state.character);
+      document.getElementById('hud-avatar').innerHTML = svg;
+      document.getElementById('hud-char-name').textContent = name;
+      document.getElementById('hub-character-svg').innerHTML = svg;
+      document.getElementById('hub-host-name').textContent = name + ':';
+      document.getElementById('cook-char-svg').innerHTML = svg;
+      document.getElementById('cook-char-name').textContent = name + ':';
+    }
+
+    function addStars(amount) {
+      state.stars += amount;
+      document.getElementById('hud-stars').textContent = state.stars;
+    }
+
+    /* ==================== NAVIGATION ==================== */
+    function enterYurt() {
+      playSuccessChord();
+      document.getElementById('screen-start').classList.add('hidden');
+      document.getElementById('top-hud').classList.remove('hidden');
+      goToHub();
+    }
+
+    function goToStart() {
+      playKomuzPluck(330, 0.2);
+      document.getElementById('top-hud').classList.add('hidden');
+      document.getElementById('screen-hub').classList.add('hidden');
+      document.getElementById('screen-cook').classList.add('hidden');
+      document.getElementById('screen-start').classList.remove('hidden');
+    }
+
+    function goToHub() {
+      playKomuzPluck(392, 0.2);
+      document.getElementById('screen-cook').classList.add('hidden');
+      document.getElementById('screen-hub').classList.remove('hidden');
+      setCategory(state.currentCategory);
+    }
+
+    /* ==================== RECIPE BOOK HUB ==================== */
+    const CATEGORY_META = {
+      dishes: { title: '🍲 Улуттук тамактар', hint: 'Кыргыздын сыйлуу улуттук тамактарын тандаңыз!' },
+      dairy: { title: '🥛 Сүт азыктары', hint: 'Жайлоонун таза сүт азыктарын жасап көрөлү!' },
+      drinks: { title: '🥤 Улуттук суусундуктар', hint: 'Сергитүүчү улуттук суусундуктарды үйрөнөбүз!' },
+      kurut: { title: '⚪ Куруттун түрлөрү', hint: 'Күзгү жайлоонун даамдуу куруттарын тандаңыз!' }
+    };
+
+    function setCategory(catKey) {
+      playKomuzPluck(440, 0.2);
+      state.currentCategory = catKey;
+
+      // Update Tab Styles
+      document.querySelectorAll('.cat-tab').forEach(btn => {
+        btn.classList.remove('bg-amber-400', 'text-amber-950', 'shadow');
+        btn.classList.add('bg-amber-900/70', 'text-amber-100');
+      });
+      const activeTab = document.getElementById('tab-' + catKey);
+      activeTab.classList.remove('bg-amber-900/70', 'text-amber-100');
+      activeTab.classList.add('bg-amber-400', 'text-amber-950', 'shadow');
+
+      document.getElementById('book-category-title').textContent = CATEGORY_META[catKey].title;
+      document.getElementById('hub-speech-text').textContent = CATEGORY_META[catKey].hint;
+
+      // Render Items
+      const grid = document.getElementById('book-items-grid');
+      grid.innerHTML = '';
+
+      RECIPES_DB[catKey].forEach(item => {
+        const isDone = state.completedDishes.includes(item.id);
+        const card = document.createElement('div');
+        card.className = 'min-w-0 w-full bg-white/95 hover:bg-amber-50 border-2 border-amber-400 rounded-2xl p-4 shadow-md transition transform hover:-translate-y-1 cursor-pointer flex flex-col justify-between';
+        card.onclick = () => openRecipeModal(item);
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div class="w-14 h-14 rounded-2xl bg-amber-100 border border-amber-300 flex items-center justify-center text-3xl shrink-0">
+                ${item.emoji}
+              </div>
+              ${isDone
+                ? '<span class="bg-green-100 text-green-800 border border-green-400 text-xs font-black px-2.5 py-1 rounded-full">✓ Даярдалды</span>'
+                : '<span class="bg-amber-100 text-amber-800 text-xs font-extrabold px-2.5 py-1 rounded-full">+20 ⭐</span>'}
+            </div>
+            <h3 class="text-lg sm:text-xl font-black text-red-900">${item.name}</h3>
+            <p class="text-xs sm:text-sm font-semibold text-amber-800 mt-1 line-clamp-2">${item.desc}</p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-amber-200 flex items-center justify-between text-xs font-extrabold text-red-700">
+            <span>Кадамдар: ${item.steps.length}</span>
+            <span class="bg-red-700 text-white px-3 py-1 rounded-xl">Ачуу ➔</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* ==================== RECIPE DETAIL MODAL ==================== */
+    function openRecipeModal(item) {
+      playKomuzPluck(523.25, 0.25);
+      state.selectedRecipe = item;
+
+      document.getElementById('modal-dish-icon').textContent = item.emoji;
+      document.getElementById('modal-dish-cat').textContent = item.categoryLabel;
+      document.getElementById('modal-dish-title').textContent = item.name;
+      document.getElementById('modal-dish-desc').textContent = item.desc;
+
+      // Ingredients (only correct ones for display)
+      const ingContainer = document.getElementById('modal-ingredients-list');
+      ingContainer.innerHTML = '';
+      item.ingredients.filter(i => i.correct).forEach(ing => {
+        const badge = document.createElement('span');
+        badge.className = 'bg-amber-100 border border-amber-400 text-amber-950 font-extrabold text-xs sm:text-sm px-3 py-1.5 rounded-xl flex items-center gap-1.5';
+        badge.innerHTML = `<span>${ing.emoji}</span><span>${ing.name}</span>`;
+        ingContainer.appendChild(badge);
+      });
+
+      // Steps
+      const stepsList = document.getElementById('modal-steps-list');
+      stepsList.innerHTML = '';
+      item.steps.forEach((st, idx) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start gap-2';
+        li.innerHTML = `
+          <span class="w-6 h-6 rounded-full bg-red-700 text-white text-xs font-black flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span>
+          <span><strong>${st.title}:</strong> ${st.desc}</span>
+        `;
+        stepsList.appendChild(li);
+      });
+
+      document.getElementById('recipe-detail-modal').classList.remove('hidden');
+    }
+
+    function closeRecipeModal() {
+      playKomuzPluck(330, 0.15);
+      document.getElementById('recipe-detail-modal').classList.add('hidden');
+    }
+
+    /* ==================== INTERACTIVE COOKING GAMEPLAY ==================== */
+    function startCookingCurrentDish() {
+      if (!state.selectedRecipe) return;
+      closeRecipeModal();
+      playSuccessChord();
+
+      state.cookingStepIndex = 0;
+      state.gatheredIds = [];
+      state.stepProgress = 0;
+
+      document.getElementById('screen-hub').classList.add('hidden');
+      document.getElementById('screen-cook').classList.remove('hidden');
+
+      const recipe = state.selectedRecipe;
+      document.getElementById('cook-dish-title').textContent = `${recipe.emoji} ${recipe.name} жасайбыз`;
+
+      renderCookingStep();
+    }
+
+    function setHelperSpeech(text, isWarning = false) {
+      const box = document.getElementById('cook-speech-box');
+      const p = document.getElementById('cook-speech-text');
+      p.textContent = text;
+
+      if (isWarning) {
+        box.classList.remove('border-amber-400', 'bg-white');
+        box.classList.add('border-red-500', 'bg-red-50', 'shake');
+        setTimeout(() => box.classList.remove('shake'), 400);
+      } else {
+        box.classList.remove('border-red-500', 'bg-red-50');
+        box.classList.add('border-amber-400', 'bg-white');
+      }
+    }
+
+    function renderCookingStep() {
+      const recipe = state.selectedRecipe;
+      const totalSteps = recipe.steps.length;
+      const currentIdx = state.cookingStepIndex;
+      const step = recipe.steps[currentIdx];
+
+      // Update Progress Header
+      const pct = Math.round(((currentIdx + 1) / totalSteps) * 100);
+      document.getElementById('cook-step-label').textContent = `Учурдагы кадам: ${currentIdx + 1}/${totalSteps}`;
+      document.getElementById('cook-step-percent').textContent = `${pct}%`;
+      document.getElementById('cook-progress-fill').style.width = `${pct}%`;
+
+      // Update Checklist
+      const checklist = document.getElementById('cook-steps-checklist');
+      checklist.innerHTML = '';
+      recipe.steps.forEach((st, idx) => {
+        const li = document.createElement('li');
+        if (idx < currentIdx) {
+          li.className = 'flex items-center gap-2 text-green-700 line-through opacity-80';
+          li.innerHTML = `<span class="w-6 h-6 rounded-full bg-green-600 text-white text-xs flex items-center justify-center shrink-0">✓</span><span>${st.title}</span>`;
+        } else if (idx === currentIdx) {
+          li.className = 'flex items-center gap-2 text-red-900 bg-amber-200/80 p-2 rounded-xl border border-amber-400';
+          li.innerHTML = `<span class="w-6 h-6 rounded-full bg-red-700 text-white text-xs font-black flex items-center justify-center shrink-0">${idx + 1}</span><span>${st.title}</span>`;
+        } else {
+          li.className = 'flex items-center gap-2 text-amber-800/70';
+          li.innerHTML = `<span class="w-6 h-6 rounded-full bg-amber-200 text-amber-900 text-xs flex items-center justify-center shrink-0">${idx + 1}</span><span>${st.title}</span>`;
+        }
+        checklist.appendChild(li);
+      });
+
+      // Update Stage Titles
+      document.getElementById('stage-instruction-title').textContent = `${currentIdx + 1}-кадам. ${step.title}`;
+      document.getElementById('stage-instruction-sub').textContent = step.desc;
+
+      const station = document.getElementById('cooking-station-area');
+      const tray = document.getElementById('ingredient-tray');
+      tray.classList.add('hidden');
+      station.innerHTML = '';
+
+      /* --- STEP TYPE 1: GATHER INGREDIENTS --- */
+      if (step.type === 'gather') {
+        setHelperSpeech('Дасторкондон керектүү азыктарды тандап казанга салыңыз!');
+        tray.classList.remove('hidden');
+
+        const correctList = recipe.ingredients.filter(i => i.correct);
+        station.innerHTML = `
+          <div class="relative flex flex-col items-center">
+            <!-- Cauldron / Bowl SVG -->
+            <div class="w-48 h-40 sm:w-56 sm:h-44 max-w-full relative flex items-center justify-center">
+              <svg viewBox="0 0 220 170" class="w-full h-full drop-shadow-lg">
+                <ellipse cx="110" cy="45" rx="85" ry="22" fill="#451a03" stroke="#92400e" stroke-width="4"/>
+                <path d="M25,45 Q25,145 110,145 Q195,145 195,45 Z" fill="#1e293b" stroke="#0f172a" stroke-width="4"/>
+                <ellipse cx="110" cy="45" rx="75" ry="16" fill="#334155"/>
+                <!-- Handles -->
+                <path d="M25,65 Q8,65 8,80 Q8,95 28,92" fill="none" stroke="#0f172a" stroke-width="6"/>
+                <path d="M195,65 Q212,65 212,80 Q212,95 192,92" fill="none" stroke="#0f172a" stroke-width="6"/>
+              </svg>
+              <!-- Added Ingredients Floating Inside -->
+              <div id="cauldron-contents" class="absolute top-3 flex flex-wrap justify-center gap-1 max-w-[140px]">
+                ${state.gatheredIds.map(id => {
+                  const found = correctList.find(x => x.id === id);
+                  return found ? `<span class="text-2xl sm:text-3xl pop-in">${found.emoji}</span>` : '';
+                }).join('')}
+              </div>
+            </div>
+            <div class="bg-amber-950 text-amber-200 font-extrabold text-xs sm:text-sm px-4 py-1.5 rounded-full mt-1">
+              Чогултулду: <span id="gather-count" class="text-yellow-400">${state.gatheredIds.length}</span> / ${correctList.length}
+            </div>
+          </div>
+        `;
+
+        // Render shuffled ingredient buttons
+        const btnContainer = document.getElementById('ingredient-buttons');
+        btnContainer.innerHTML = '';
+        const shuffled = [...recipe.ingredients].sort(() => Math.random() - 0.5);
+
+        shuffled.forEach(ing => {
+          const alreadyPicked = state.gatheredIds.includes(ing.id);
+          const btn = document.createElement('button');
+          btn.disabled = alreadyPicked;
+          btn.className = alreadyPicked
+            ? 'bg-green-100 border-2 border-green-500 opacity-50 px-3.5 py-2 rounded-2xl flex flex-col items-center min-w-[82px]'
+            : 'bg-white hover:bg-amber-50 active:scale-95 border-2 border-amber-500 shadow px-3.5 py-2 rounded-2xl flex flex-col items-center min-w-[82px] transition cursor-pointer';
+
+          btn.innerHTML = `
+            <span class="text-2xl sm:text-3xl">${ing.emoji}</span>
+            <span class="text-xs font-extrabold text-amber-950 mt-1">${ing.name}</span>
+          `;
+
+          btn.onclick = () => {
+            if (!ing.correct) {
+              playErrorBuzz();
+              setHelperSpeech(`«${ing.name}» бул тамакка кошулбайт, башкасын тандап көр!`, true);
+              return;
+            }
+            if (!state.gatheredIds.includes(ing.id)) {
+              playKomuzPluck(523.25, 0.25);
+              state.gatheredIds.push(ing.id);
+              setHelperSpeech(`Азаматсыз! ${ing.name} кошулду!`);
+
+              if (state.gatheredIds.length >= correctList.length) {
+                addStars(5);
+                setTimeout(() => nextCookingStep(), 650);
+              } else {
+                renderCookingStep();
+              }
+            }
+          };
+          btnContainer.appendChild(btn);
+        });
+      }
+
+      /* --- STEP TYPE 2: BOIL / COOK IN CAULDRON --- */
+      else if (step.type === 'boil') {
+        state.stepProgress = 0;
+        setHelperSpeech('Төмөнкү баскычты басып, тамакты бышырыңыз!');
+
+        station.innerHTML = `
+          <div class="flex flex-col items-center">
+            <div class="relative w-52 h-48 max-w-full flex items-center justify-center">
+              <!-- Steam -->
+              <div id="steam-group" class="hidden absolute -top-4 flex gap-4">
+                <span class="text-3xl steam-puff">♨️</span>
+                <span class="text-3xl steam-puff" style="animation-delay:0.5s">💨</span>
+                <span class="text-3xl steam-puff" style="animation-delay:1s">♨️</span>
+              </div>
+              <!-- Cauldron over Fire -->
+              <svg viewBox="0 0 220 190" class="w-full h-full">
+                <!-- Flames -->
+                <path class="flame" d="M75,180 Q65,150 85,135 Q90,155 100,130 Q115,155 125,135 Q145,150 135,180 Z" fill="#f97316"/>
+                <path class="flame" d="M88,180 Q85,160 100,148 Q112,162 122,180 Z" fill="#fde047"/>
+                <!-- Cauldron -->
+                <path d="M30,55 Q30,145 110,145 Q190,145 190,55 Z" fill="#1e293b" stroke="#0f172a" stroke-width="4"/>
+                <ellipse cx="110" cy="55" rx="80" ry="18" fill="#d97706"/>
+                <ellipse cx="110" cy="55" rx="70" ry="13" fill="#fef08a" opacity="0.6"/>
+              </svg>
+              <div class="absolute top-12 text-3xl">${recipe.emoji}</div>
+            </div>
+
+            <!-- Action Progress Bar -->
+            <div class="w-64 bg-amber-200 h-5 rounded-full border-2 border-amber-600 overflow-hidden mb-3">
+              <div id="action-meter" class="h-full bg-gradient-to-r from-orange-500 to-red-600 transition-all duration-150" style="width: 0%"></div>
+            </div>
+
+            <button onclick="advanceInteractiveAction(25)" class="crimson-btn text-white font-black text-lg px-7 py-3.5 rounded-2xl shadow-lg flex items-center gap-2">
+              <span>🔥</span>
+              <span>Бышыруу (Басыңыз!)</span>
+            </button>
+          </div>
+        `;
+      }
+
+      /* --- STEP TYPE 3: KNEAD & ROLL DOUGH --- */
+      else if (step.type === 'dough') {
+        state.stepProgress = 0;
+        setHelperSpeech('Үбөлүк баскычын басып, камырды жука кылып жайыңыз!');
+
+        station.innerHTML = `
+          <div class="flex flex-col items-center">
+            <!-- Wooden Board (Такта) + Dough -->
+            <div class="w-64 max-w-full h-44 bg-amber-700 border-4 border-amber-900 rounded-3xl shadow-inner flex items-center justify-center relative mb-3">
+              <div id="dough-circle" class="w-20 h-20 rounded-full bg-amber-100 border-2 border-amber-300 shadow-md transition-all duration-200 flex items-center justify-center text-xs font-extrabold text-amber-800">
+                Камыр
+              </div>
+              <div id="rolling-pin" class="absolute -top-3 text-4xl transition-transform duration-200">🥖</div>
+            </div>
+
+            <div class="w-64 bg-amber-200 h-5 rounded-full border-2 border-amber-600 overflow-hidden mb-3">
+              <div id="action-meter" class="h-full bg-gradient-to-r from-amber-500 to-green-600 transition-all duration-150" style="width: 0%"></div>
+            </div>
+
+            <button onclick="advanceDoughAction()" class="gold-btn text-amber-950 font-black text-lg px-7 py-3.5 rounded-2xl shadow-lg flex items-center gap-2">
+              <span>🥖</span>
+              <span>Камыр жаюу (Басыңыз!)</span>
+            </button>
+          </div>
+        `;
+      }
+
+      /* --- STEP TYPE 4: CHURN KYMYZ / BUTTER IN SABA --- */
+      else if (step.type === 'churn') {
+        state.stepProgress = 0;
+        setHelperSpeech('Бишкекти өйдө-ылдый кыймылдатып жакшылап бышыңыз!');
+
+        station.innerHTML = `
+          <div class="flex flex-col items-center">
+            <div class="relative w-48 h-48 flex items-center justify-center mb-2">
+              <!-- Bishkek Stick -->
+              <div id="bishkek-stick" class="absolute top-1 w-3 h-28 bg-amber-700 border border-amber-950 rounded-full transition-transform duration-150"></div>
+              <!-- Leather Saba -->
+              <svg viewBox="0 0 180 170" class="w-full h-full mt-6">
+                <path d="M72,35 L108,35 L135,140 Q138,160 90,160 Q42,160 45,140 Z" fill="#92400e" stroke="#451a03" stroke-width="4"/>
+                <path d="M60,95 Q90,85 120,95" stroke="#fbbf24" stroke-width="3" fill="none"/>
+                <ellipse cx="90" cy="35" rx="18" ry="6" fill="#451a03"/>
+              </svg>
+            </div>
+
+            <div class="w-64 bg-amber-200 h-5 rounded-full border-2 border-amber-600 overflow-hidden mb-3">
+              <div id="action-meter" class="h-full bg-gradient-to-r from-sky-400 to-green-500 transition-all duration-150" style="width: 0%"></div>
+            </div>
+
+            <button onclick="advanceChurnAction()" class="gold-btn text-amber-950 font-black text-lg px-7 py-3.5 rounded-2xl shadow-lg flex items-center gap-2">
+              <span>🥄</span>
+              <span>Бишкек менен бышуу!</span>
+            </button>
+          </div>
+        `;
+      }
+
+      /* --- STEP TYPE 5: SHAPE KURUT BALLS --- */
+      else if (step.type === 'kurut_shape') {
+        state.stepProgress = 0;
+        setHelperSpeech('Сүзмөдөн тоголок куруттарды жасап чийге тизиңиз!');
+
+        station.innerHTML = `
+          <div class="flex flex-col items-center">
+            <!-- Traditional Chii Mat -->
+            <div class="w-64 max-w-full h-40 bg-amber-200 border-4 border-amber-700 rounded-2xl p-3 flex flex-wrap items-center justify-center gap-3 mb-3 shadow-inner" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(180,83,9,0.2) 11px);">
+              <div id="kurut-balls-container" class="flex flex-wrap justify-center gap-3">
+                <span class="text-xs font-extrabold text-amber-800">Чийдин үстү бош...</span>
+              </div>
+            </div>
+
+            <div class="w-64 bg-amber-200 h-5 rounded-full border-2 border-amber-600 overflow-hidden mb-3">
+              <div id="action-meter" class="h-full bg-gradient-to-r from-amber-400 to-green-500 transition-all duration-150" style="width: 0%"></div>
+            </div>
+
+            <button onclick="advanceKurutAction()" class="gold-btn text-amber-950 font-black text-lg px-7 py-3.5 rounded-2xl shadow-lg flex items-center gap-2">
+              <span>⚪</span>
+              <span>Курут тоголоктоо!</span>
+            </button>
+          </div>
+        `;
+      }
+
+      /* --- STEP TYPE 6: FINAL PLATING ON DASTORKON --- */
+      else if (step.type === 'plate') {
+        setHelperSpeech('Эң сонун! Эми даяр болгон даамды кооз табакка салып дасторконго коёлу!');
+
+        station.innerHTML = `
+          <div class="flex flex-col items-center">
+            <div class="w-48 h-48 max-w-full rounded-full bg-white border-8 border-blue-800 shadow-2xl flex items-center justify-center relative mb-5 animate-float">
+              <div class="w-36 h-36 rounded-full border-2 border-dashed border-amber-500 flex items-center justify-center">
+                <span class="text-7xl">${recipe.emoji}</span>
+              </div>
+            </div>
+
+            <button onclick="finishDish()" class="green-btn text-white font-black text-xl px-8 py-4 rounded-2xl shadow-xl flex items-center gap-2">
+              <span>🍽️</span>
+              <span>Дасторконго коюу!</span>
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function advanceInteractiveAction(increment) {
+      playKomuzPluck(392 + state.stepProgress * 2, 0.2);
+      state.stepProgress = Math.min(100, state.stepProgress + increment);
+      document.getElementById('action-meter').style.width = state.stepProgress + '%';
+      const steam = document.getElementById('steam-group');
+      if (steam) steam.classList.remove('hidden');
+
+      if (state.stepProgress >= 100) {
+        addStars(5);
+        setTimeout(() => nextCookingStep(), 400);
+      }
+    }
+
+    function advanceDoughAction() {
+      playKomuzPluck(440 + state.stepProgress * 2, 0.2);
+      state.stepProgress = Math.min(100, state.stepProgress + 25);
+      document.getElementById('action-meter').style.width = state.stepProgress + '%';
+
+      const dough = document.getElementById('dough-circle');
+      const pin = document.getElementById('rolling-pin');
+      const size = 80 + state.stepProgress * 0.7;
+      dough.style.width = size + 'px';
+      dough.style.height = (size * 0.75) + 'px';
+      pin.style.transform = `translateY(${state.stepProgress % 50 === 0 ? '18px' : '0px'}) rotate(-12deg)`;
+
+      if (state.stepProgress >= 100) {
+        addStars(5);
+        setTimeout(() => nextCookingStep(), 400);
+      }
+    }
+
+    function advanceChurnAction() {
+      playKomuzPluck(330 + state.stepProgress * 3, 0.2);
+      state.stepProgress = Math.min(100, state.stepProgress + 20);
+      document.getElementById('action-meter').style.width = state.stepProgress + '%';
+
+      const stick = document.getElementById('bishkek-stick');
+      stick.style.transform = state.stepProgress % 40 === 0 ? 'translateY(-18px)' : 'translateY(14px)';
+
+      if (state.stepProgress >= 100) {
+        addStars(5);
+        setTimeout(() => nextCookingStep(), 400);
+      }
+    }
+
+    function advanceKurutAction() {
+      playKomuzPluck(493.88 + state.stepProgress * 2, 0.2);
+      state.stepProgress = Math.min(100, state.stepProgress + 20);
+      document.getElementById('action-meter').style.width = state.stepProgress + '%';
+
+      const count = Math.floor(state.stepProgress / 20);
+      const container = document.getElementById('kurut-balls-container');
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const ball = document.createElement('span');
+        ball.className = 'text-3xl pop-in';
+        ball.textContent = state.selectedRecipe.emoji;
+        container.appendChild(ball);
+      }
+
+      if (state.stepProgress >= 100) {
+        addStars(5);
+        setTimeout(() => nextCookingStep(), 400);
+      }
+    }
+
+    function nextCookingStep() {
+      state.cookingStepIndex++;
+      if (state.cookingStepIndex < state.selectedRecipe.steps.length) {
+        renderCookingStep();
+      } else {
+        finishDish();
+      }
+    }
+
+    function finishDish() {
+      playSuccessChord();
+      launchConfetti();
+
+      const recipe = state.selectedRecipe;
+      addStars(20);
+
+      if (!state.completedDishes.includes(recipe.id)) {
+        state.completedDishes.push(recipe.id);
+        document.getElementById('hud-dishes-count').textContent = state.completedDishes.length;
+      }
+
+      document.getElementById('celebration-dish-msg').textContent = `${recipe.name} даяр болду!`;
+      document.getElementById('celebration-dish-emoji').textContent = recipe.emoji;
+      document.getElementById('celebration-modal').classList.remove('hidden');
+    }
+
+    function closeCelebrationAndContinue() {
+      document.getElementById('celebration-modal').classList.add('hidden');
+      goToHub();
+    }
+
+    function closeCelebrationAndViewDastorkon() {
+      document.getElementById('celebration-modal').classList.add('hidden');
+      goToHub();
+      openDastorkonModal();
+    }
+
+    /* ==================== DASTORKON MODAL ==================== */
+    function openDastorkonModal() {
+      playKomuzPluck(440, 0.25);
+      const grid = document.getElementById('dastorkon-grid');
+      grid.innerHTML = '';
+
+      const allItems = [
+        ...RECIPES_DB.dishes,
+        ...RECIPES_DB.dairy,
+        ...RECIPES_DB.drinks,
+        ...RECIPES_DB.kurut
+      ];
+
+      if (state.completedDishes.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-8 text-amber-900 font-bold">
+            Дасторкон азырынча бош. Рецепт китепчесинен тамак тандап даярдаңыз! 🍲
+          </div>
+        `;
+      } else {
+        state.completedDishes.forEach(id => {
+          const item = allItems.find(x => x.id === id);
+          if (!item) return;
+          const card = document.createElement('div');
+          card.className = 'bg-white border-2 border-amber-400 rounded-2xl p-3 text-center shadow-sm';
+          card.innerHTML = `
+            <div class="text-4xl mb-1">${item.emoji}</div>
+            <div class="font-black text-red-900 text-sm">${item.name}</div>
+            <div class="text-xs font-bold text-green-700 mt-0.5">✓ Даярдалды</div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      document.getElementById('dastorkon-modal').classList.remove('hidden');
+    }
+
+    function closeDastorkonModal() {
+      document.getElementById('dastorkon-modal').classList.add('hidden');
+    }
+
+    /* ==================== CONFETTI CELEBRATION EFFECT ==================== */
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const colors = ['#fbbf24', '#ef4444', '#22c55e', '#38bdf8', '#f97316'];
+      const particles = Array.from({ length: 90 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 7 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: Math.random() * 4 + 2,
+        vx: (Math.random() - 0.5) * 3
+      }));
+
+      let frames = 0;
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        frames++;
+        if (frames < 140) {
+          requestAnimationFrame(animate);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      animate();
+    }
+  </script>
+</body>
+</html>
